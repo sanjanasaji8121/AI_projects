@@ -1,0 +1,29 @@
+-----SHORT REPORT-----
+CHALLENGE: FEATURE ENGINEERING CHALLENGE
+
+Dataset: Santander Customer Transaction Prediction (Kaggle)
+Model: Logistic Regression
+Aim: To improve recall from 0.83 to 0.88 or higher while maintaining the overall performance
+
+PROBLEM:The dataset is heavily imbalanced ( approx. 90% class 0, ~ and around 10% class 1). This means a Logistic Regression model using default settings tends to under-predict the minority class, since optimizing for overall accuracy naturally biases the model toward the majority class. Our own reproduced baseline confirmed this: Recall of 0.263 with default settings, well below the 0.83 reference point in the assignment. The core challenge of this project was therefore not just add clever features, but first understanding why recall was low, and addressing the imbalance directly before layering on feature engineering.
+
+Experiments were performed to improve the recall value while maintaining the precision and ultimately the F1 score
+
+Approaches: 
+1. Removing class imabalance: using `class_weight='balanced'` and decision threshold tuning. This alone was sufficient to reach near the recall target.
+
+2. Feature Engineering (1st idea): adding new features(frequencies) which corresponded to the frequency of the corresponding frequency of the value + threshold tuning (manually experimented out)
+
+3. Feature Engineering(2nd idea): adding new columns which had statistics of the the column(mean)+threshold tuning(manually experimented out)
+
+4.Outlier Handling: no new features, 1st and the 99th percentile values were clipped out inorder to remove the outliers
+
+What worked: class_weight='balanced'+threshold tuning i.e. the 2nd experiment worked the best as it reached the target recall value (0.90) and had the best relative precision as well
+THe main issue in the dataset was the class imbalance and fixing it pushed the recall value to 0.77 which means there was an increase of around 300%
+Further minor improvement was done by threshold tuning which pushed the recall to 0.9
+
+What did not work: Frequency encoding- It increased the recall to 0.995 but at the cost of precision which dropped to 0.11, thus 0.3 threshold was very much aggressive indeed
+
+**Here, I learned that with new sets of frequencies, thresholds must be tuned again**
+
+Row-level encoding did seem to work at the surface but in reality, it made th precision worse than before, thus the model at experiment 2 was at it's best
